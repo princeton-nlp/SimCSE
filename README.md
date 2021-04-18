@@ -9,7 +9,9 @@ Probably you will think this as another *"empty"* repo of a preprint paper 🥱.
 
 Wait a minute! The authors are working day and night 💪, to make the code and models available, so you can explore our state-of-the-art sentence embeddings. 
 
-We anticipate the code will be out * **in one week** *. So why not star⭐️ and watch👀 us first and stay tuned?
+We anticipate the code will be out * **in one week** *. 
+
+Please star⭐️ and watch👀 us, and stay tuned!
 
 4/18: We released our paper. Check it out!
 
