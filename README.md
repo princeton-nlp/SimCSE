@@ -11,7 +11,7 @@ Wait a minute! The authors are working day and night 💪, to make the code and 
 
 We anticipate the code will be out * **in one week** *. 
 
-Please star⭐️ and watch👀 us, and stay tuned!
+Please watch👀 us and stay tuned!
 
 4/18: We released our paper. Check it out!
 
