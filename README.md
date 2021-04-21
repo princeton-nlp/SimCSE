@@ -1,35 +1,33 @@
-# SimCSE: Simple Contrastive Learning of Sentence Embeddings
+## SimCSE: Simple Contrastive Learning of Sentence Embeddings
 
+This repository contains the code and pre-trained models for the [SimCSE: Simple Contrastive Learning of Sentence Embeddings](https://arxiv.org/abs/2104.08821).
 
-****** **New** ******
+**************************** **Updates** ****************************
 
-Thanks for your interest in our repo! 
+<!-- Thanks for your interest in our repo! -->
 
-Probably you will think this as another *"empty"* repo of a preprint paper 🥱. 
+<!-- Probably you will think this as another *"empty"* repo of a preprint paper 🥱.
+Wait a minute! The authors are working day and night 💪, to make the code and models available, so you can explore our state-of-the-art sentence embeddings.
+We anticipate the code will be out * **in one week** *. -->
 
-Wait a minute! The authors are working day and night 💪, to make the code and models available, so you can explore our state-of-the-art sentence embeddings. 
+* 4/20: We released our model checkpoints and evaluation code.
+* 4/18: We released [our paper](https://arxiv.org/pdf/2104.08821.pdf). Check it out!
 
-We anticipate the code will be out * **in one week** *. 
+We will release our training code soon. Please watch👀 our repo and stay tuned!
 
-Please watch👀 us and stay tuned!
-
-4/20: We released our model checkpoints and evaluation code.
-
-4/18: We released our paper. Check it out!
-
-****** **End new information** ******
 
 ## Quick links
 
-
   - [Overview](#overview)
-  - [Out-of-the-box sentence embeddings](#use-our-models-out-of-the-box)
+  - [Pre-trained sentence embeddings](#use-our-models-out-of-the-box)
   - [Requirements](#requirements)
   - [Evaluation](#evaluation)
+  - [Bugs or Questions?](#Bugs-or-questions)
+  - [Citation](#citation)
 
 ## Overview
 
-This is the codebase for the paper [SimCSE: Simple Contrastive Learning of Sentence Embeddings](https://arxiv.org/abs/2104.08821). We propose a simple contrastive learning framework that works with both unlabeled and labeled data. Unsupervised SimCSE simply takes an input sentence and predicts itself in a contrastive learning framework, with only standard dropout used as noise. Our supervised SimCSE incorporates annotated pairs from NLI datasets into contrastive learning by using `entailment` pairs as positives and `contradiction` pairs as hard negatives. The following figure is an illustration of our models.
+We propose a simple contrastive learning framework that works with both unlabeled and labeled data. Unsupervised SimCSE simply takes an input sentence and predicts itself in a contrastive learning framework, with only standard dropout used as noise. Our supervised SimCSE incorporates annotated pairs from NLI datasets into contrastive learning by using `entailment` pairs as positives and `contradiction` pairs as hard negatives. The following figure is an illustration of our models.
 
 ![](figure/model.png)
 
@@ -46,7 +44,7 @@ Our pre-trained models are now publicly available with [HuggingFace's Transforme
 |     [sup-simcse-roberta-base](https://huggingface.co/princeton-nlp/sup-simcse-roberta-base)     |   82.52  |
 |     [sup-simcse-roberta-large](https://huggingface.co/princeton-nlp/sup-simcse-roberta-large)    |   83.76  |
 
-**Naming rules**: `unsup` and `sup` represent "unsupervised" (trained on Wikipedia corpus) and "supervised" (trained on NLI datasets) respectively. 
+**Naming rules**: `unsup` and `sup` represent "unsupervised" (trained on Wikipedia corpus) and "supervised" (trained on NLI datasets) respectively.
 
 You can easily import our model in an out-of-the-box way with HuggingFace's API:
 ```python
@@ -105,9 +103,9 @@ pip install -r requirements.txt
 ```
 
 ## Evaluation
-Our evaluation code for sentence embeddings is based on a modified version of [SentEval](https://github.com/facebookresearch/SentEval). It evaluates quality of sentence embeddings by semantic textual similarity (STS) tasks and downstream transfer tasks. For STS tasks, our evaluation takes the "all" setting, and report Spearman's correlation. See [our paper](https://arxiv.org/abs/2104.08821) (Appendix B) for evaluation details. 
+Our evaluation code for sentence embeddings is based on a modified version of [SentEval](https://github.com/facebookresearch/SentEval). It evaluates quality of sentence embeddings by semantic textual similarity (STS) tasks and downstream transfer tasks. For STS tasks, our evaluation takes the "all" setting, and report Spearman's correlation. See [our paper](https://arxiv.org/abs/2104.08821) (Appendix B) for evaluation details.
 
-Before evaluation, please download the evaluation datasets by 
+Before evaluation, please download the evaluation datasets by
 ```bash
 cd SentEval/data/downstream/
 bash get_transfer_data.bash
@@ -133,7 +131,7 @@ which is expected to output the results in a tabular format:
 
 Arguments for the evaluation script are as follows,
 
-* `--model_name_or_path`: The name or path of a `transformers`-based pre-trained checkpoint. You can directly use the models in the above table, e.g., `princeton-nlp/sup-simcse-bert-base-uncased`. 
+* `--model_name_or_path`: The name or path of a `transformers`-based pre-trained checkpoint. You can directly use the models in the above table, e.g., `princeton-nlp/sup-simcse-bert-base-uncased`.
 * `--pooler`: Pooling method. Now we support
     * `cls` (default): Use the representation of `[CLS]` token. A linear+activation layer is applied after the representation (it's in the standard BERT implementation). If you use SimCSE, you should use this option.
     * `cls_before_pooler`: Use the representation of `[CLS]` token without the extra linear+activation.
@@ -149,4 +147,21 @@ Arguments for the evaluation script are as follows,
     * `transfer`: Evaluate on transfer tasks.
     * `full`: Evaluate on both STS and transfer tasks.
     * `na`: Manually set tasks by `--tasks`.
-* `--tasks`: Specify which dataset(s) to evaluate on. Will be overridden if `--task_set` is not `na`. See the code for a full list of tasks. 
+* `--tasks`: Specify which dataset(s) to evaluate on. Will be overridden if `--task_set` is not `na`. See the code for a full list of tasks.
+
+## Bugs or questions?
+
+If you have any questions related to the code or the paper, feel free to email Tianyu (`tianyug@cs.princeton.edu`) and Xingcheng (`yxc18@mails.tsinghua.edu.cn`). If you encounter any problems when using the code, or want to report a bug, you can open an issue. Please try to specify the problem with details so we can help you better and quicker!
+
+## Citation
+
+Please cite our paper if you use SimCSE in your work:
+
+```
+@article{gao2021simcse,
+   title={{SimCSE}: Simple Contrastive Learning of Sentence Embeddings},
+   author={Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
+   journal={arXiv preprint arXiv:2104.08821},
+   year={2021}
+}
+```
