@@ -10,7 +10,7 @@ This repository contains the code and pre-trained models for the [SimCSE: Simple
 Wait a minute! The authors are working day and night 💪, to make the code and models available, so you can explore our state-of-the-art sentence embeddings.
 We anticipate the code will be out * **in one week** *. -->
 
-* 4/20: We released our model checkpoints and evaluation code.
+* 4/20: We released our [model checkpoints](#use-our-models-out-of-the-box) and [evaluation code](#evaluation).
 * 4/18: We released [our paper](https://arxiv.org/pdf/2104.08821.pdf). Check it out!
 
 We will release our training code soon. Please watch👀 our repo and stay tuned!
@@ -103,9 +103,9 @@ pip install -r requirements.txt
 ```
 
 ## Evaluation
-Our evaluation code for sentence embeddings is based on a modified version of [SentEval](https://github.com/facebookresearch/SentEval). It evaluates quality of sentence embeddings by semantic textual similarity (STS) tasks and downstream transfer tasks. For STS tasks, our evaluation takes the "all" setting, and report Spearman's correlation. See [our paper](https://arxiv.org/abs/2104.08821) (Appendix B) for evaluation details.
+Our evaluation code for sentence embeddings is based on a modified version of [SentEval](https://github.com/facebookresearch/SentEval). It evaluates sentence embeddings on semantic textual similarity (STS) tasks and downstream transfer tasks. For STS tasks, our evaluation takes the "all" setting, and report Spearman's correlation. See [our paper](https://arxiv.org/pdf/2104.08821.pdf) (Appendix B) for evaluation details.
 
-Before evaluation, please download the evaluation datasets by
+Before evaluation, please download the evaluation datasets by running
 ```bash
 cd SentEval/data/downstream/
 bash get_transfer_data.bash
