@@ -14,8 +14,6 @@ We anticipate the code will be out * **in one week** *. -->
 * 4/20: We released our [model checkpoints](#use-our-models-out-of-the-box) and [evaluation code](#evaluation).
 * 4/18: We released [our paper](https://arxiv.org/pdf/2104.08821.pdf). Check it out!
 
-We will release our training code soon. Please watch👀 our repo and stay tuned!
-
 
 ## Quick links
 
