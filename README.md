@@ -22,6 +22,7 @@ We will release our training code soon. Please watch👀 our repo and stay tuned
   - [Pre-trained sentence embeddings](#use-our-models-out-of-the-box)
   - [Requirements](#requirements)
   - [Evaluation](#evaluation)
+  - [Training](#training)
   - [Bugs or Questions?](#Bugs-or-questions)
   - [Citation](#citation)
 
@@ -148,6 +149,17 @@ Arguments for the evaluation script are as follows,
     * `full`: Evaluate on both STS and transfer tasks.
     * `na`: Manually set tasks by `--tasks`.
 * `--tasks`: Specify which dataset(s) to evaluate on. Will be overridden if `--task_set` is not `na`. See the code for a full list of tasks.
+
+## Training 
+
+### Data
+
+For unsupervised SimCSE, we sample 1 million sentences from English Wikipedia; for supervised SimCSE, we use the SNLI and MNLI datasets. You can use `data/download_wiki.sh` and `data/download_nli.sh` to download the two datasets.
+
+### Training script
+
+We provide example training scripts for both unsupervised and supervised SimCSE. In `run_unsup_example.sh`, we provide a single-GPU (or CPU) example for the unsupervised version, and in `run_sup_example.sh` we give a multiple-GPU example for the supervised version. Both scripts call `train.py` for training. We explain the argument in following:
+* sdf
 
 ## Bugs or questions?
 
