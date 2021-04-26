@@ -28,9 +28,9 @@ def simcse(text1, text2, text3):
 
 
 inputs = [
-          gr.inputs.Textbox(lines=1, label="Input Text One"),
-          gr.inputs.Textbox(lines=1, label="Input Text Two"),
-          gr.inputs.Textbox(lines=1, label="Input Text Three")
+          gr.inputs.Textbox(lines=5, label="Input Text One"),
+          gr.inputs.Textbox(lines=5, label="Input Text Two"),
+          gr.inputs.Textbox(lines=5, label="Input Text Three")
 ]
 
 outputs = [
