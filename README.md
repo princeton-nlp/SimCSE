@@ -66,7 +66,7 @@ inputs = tokenizer(texts, padding=True, truncation=True, return_tensors="pt")
 
 # Get the embeddings
 with torch.no_grad():
-    embeddings = model(**inputs,output_hidden_states=True, return_dict=True).pooler_output
+    embeddings = model(**inputs, output_hidden_states=True, return_dict=True).pooler_output
 
 # Calculate cosine similarities
 # Cosine similarities are in [-1, 1]. Higher means more similar
