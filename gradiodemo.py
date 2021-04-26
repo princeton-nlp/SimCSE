@@ -24,7 +24,7 @@ def simcse(text1, text2, text3):
     # Cosine similarities are in [-1, 1]. Higher means more similar
     cosine_sim_0_1 = 1 - cosine(embeddings[0], embeddings[1])
     cosine_sim_0_2 = 1 - cosine(embeddings[0], embeddings[2])
-    return "Cosine similarity between \"%s\" and \"%s\" is: %.3f" % (texts[0], texts[1], cosine_sim_0_1), "Cosine similarity between \"%s\" and \"%s\" is: %.3f" % (texts[0], texts[2], cosine_sim_0_2)
+    return {"cosine similarity":cosine_sim_0_1}, {"cosine similarity":cosine_sim_0_2}
 
 
 inputs = [
@@ -34,8 +34,8 @@ inputs = [
 ]
 
 outputs = [
-            gr.outputs.Textbox(label="Output Text One"),
-            gr.outputs.Textbox(label="Output Text Two")
+            gr.outputs.Label(type="confidences",label="Cosine similarity between text one and two"),
+            gr.outputs.Label(type="confidences", label="Cosine similarity between text one and three")
 ]
 
 
