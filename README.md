@@ -10,7 +10,7 @@ This repository contains the code and pre-trained models for our paper [SimCSE: 
 Wait a minute! The authors are working day and night 💪, to make the code and models available, so you can explore our state-of-the-art sentence embeddings.
 We anticipate the code will be out * **in one week** *. -->
 
-* 4/26: SimCSE is now on [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) (Thanks [@AK391](https://github.com/AK391)!). Try it out!
+<!-- * 4/26: SimCSE is now on [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) (Thanks [@AK391](https://github.com/AK391)!). Try it out! -->
 * 4/23: We released our [training code](#training).
 * 4/20: We released our [model checkpoints](#use-our-models-out-of-the-box) and [evaluation code](#evaluation).
 * 4/18: We released [our paper](https://arxiv.org/pdf/2104.08821.pdf). Check it out!
@@ -25,6 +25,7 @@ We anticipate the code will be out * **in one week** *. -->
   - [Training](#training)
   - [Bugs or Questions?](#Bugs-or-questions)
   - [Citation](#citation)
+  - [SimCSE Elsewhere](#simcse-elsewhere)
 
 ## Overview
 
@@ -150,7 +151,7 @@ Arguments for the evaluation script are as follows,
     * `na`: Manually set tasks by `--tasks`.
 * `--tasks`: Specify which dataset(s) to evaluate on. Will be overridden if `--task_set` is not `na`. See the code for a full list of tasks.
 
-## Training 
+## Training
 
 ### Data
 
@@ -168,7 +169,7 @@ We provide example training scripts for both unsupervised and supervised SimCSE.
   * `--mlm_weight`: Weight for the MLM objective.
   * `--mlm_probability`: Masking rate for the MLM objective.
 
-All the other arguments are standard Huggingface's `transformers` training arguments. Some of the often-used arguments are: `--output_dir`, `--learning_rate`, `--per_device_train_batch_size`. In our example scripts, we also set to evaluate the model on the STS-B development set (need to download the dataset following the [evaluation](#evaluation) section) and save the best checkpoint. 
+All the other arguments are standard Huggingface's `transformers` training arguments. Some of the often-used arguments are: `--output_dir`, `--learning_rate`, `--per_device_train_batch_size`. In our example scripts, we also set to evaluate the model on the STS-B development set (need to download the dataset following the [evaluation](#evaluation) section) and save the best checkpoint.
 
 **REPRODUCTION**: For results in the paper, we use Nvidia 3090 GPUs with CUDA 11. Using different types of devices or different versions of CUDA/other softwares may lead to slightly different performance.
 
@@ -193,8 +194,10 @@ Please cite our paper if you use SimCSE in your work:
 }
 ```
 
-## SimCSE elsewhere
+## SimCSE Elsewhere
 
 We thank the community's efforts for extending SimCSE!
 
-[Jianlin Su](https://github.com/bojone) has provided [a Chinese version of SimCSE](https://github.com/bojone/SimCSE). [AK391](https://github.com/AK391) has provided a [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) of SimCSE. [Nils Reimers](https://www.nils-reimers.de) has implemented a `sentence-transformers`-based [training code](https://colab.research.google.com/drive/1gAjXcI4uSxDE_IcvZdswFYVAo7XvPeoU?usp=sharing#scrollTo=UXUsikOc6oiB) for SimCSE.
+- [Jianlin Su](https://github.com/bojone) has provided [a Chinese version of SimCSE](https://github.com/bojone/SimCSE).
+- [AK391](https://github.com/AK391) has provided a [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) of SimCSE.
+- [Nils Reimers](https://github.com/nreimers) has implemented a `sentence-transformers`-based [training code](https://colab.research.google.com/drive/1gAjXcI4uSxDE_IcvZdswFYVAo7XvPeoU?usp=sharing#scrollTo=UXUsikOc6oiB) for SimCSE.

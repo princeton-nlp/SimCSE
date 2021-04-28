@@ -7,10 +7,11 @@ import torch
 import os
 import json
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--path", type=str, help="Path of SimCSE checkpoint folder")
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
     print("SimCSE checkpoint -> Huggingface checkpoint for {}".format(args.path))
 
@@ -20,7 +21,7 @@ def main():
         # Replace "mlp" to "pooler"
         if "mlp" in key:
             key = key.replace("mlp", "pooler")
-        
+
         # Delete "bert" or "roberta" prefix
         if "bert." in key:
             key = key.replace("bert.", "")
@@ -36,6 +37,7 @@ def main():
     for i in range(len(config["architectures"])):
         config["architectures"][i] = config["architectures"][i].replace("ForCL", "Model")
     json.dump(config, open(os.path.join(args.path, "config.json"), "w"), indent=2)
+
 
 if __name__ == "__main__":
     main()

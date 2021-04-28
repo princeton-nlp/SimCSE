@@ -1,6 +1,8 @@
-# In this example, we show how to train SimCSE using multiple GPU cards and PyTorch's distributed data parallel on supervised NLI dataset.
+#!/bin/bash
 
+# In this example, we show how to train SimCSE using multiple GPU cards and PyTorch's distributed data parallel on supervised NLI dataset.
 # Set how many GPUs to use
+
 NUM_GPU=4
 
 # Randomly set a port number
