@@ -41,18 +41,18 @@ class Similarity(nn.Module):
         super().__init__()
         self.temp = temp
         self.cos = nn.CosineSimilarity(dim=-1)
-    
+
     def forward(self, x, y, temp=None):
         if temp is None:
             temp = self.temp
-        return self.cos(x, y) / temp        
+        return self.cos(x, y) / temp
 
 
 class Pooler(nn.Module):
     """
     Parameter-free poolers to get the sentence embedding
     'cls': [CLS] representation with BERT/RoBERTa's MLP pooler.
-    'cls': [CLS] representation without the original MLP pooler.
+    'cls_before_pooler': [CLS] representation without the original MLP pooler.
     'avg': average of the last layers' hidden states at each token.
     'avg_top2': average of the last two layers.
     'avg_first_last': average of the first and the last layers.
@@ -156,11 +156,11 @@ def cl_forward(cls,
     pooler_output = cls.pooler(attention_mask, outputs)
     pooler_output = pooler_output.view((batch_size, num_sent, pooler_output.size(-1))) # (bs, num_sent, hidden)
 
-    # If using "cls", we add an extra MLP layer 
-    # (same as BERT's original implementation) over the representation. 
+    # If using "cls", we add an extra MLP layer
+    # (same as BERT's original implementation) over the representation.
     if cls.pooler_type == "cls":
         pooler_output = cls.mlp(pooler_output)
-    
+
     # Separate representation
     z1, z2 = pooler_output[:,0], pooler_output[:,1]
 
@@ -184,14 +184,14 @@ def cl_forward(cls,
         dist.all_gather(tensor_list=z1_list, tensor=z1.contiguous())
         dist.all_gather(tensor_list=z2_list, tensor=z2.contiguous())
 
-        # Since allgather results do not have gradients, we replace the 
+        # Since allgather results do not have gradients, we replace the
         # current process's corresponding embeddings with original tensors
         z1_list[dist.get_rank()] = z1
         z2_list[dist.get_rank()] = z2
         # Get full batch embeddings: (bs x N, hidden)
         z1 = torch.cat(z1_list, 0)
         z2 = torch.cat(z2_list, 0)
-    
+
     cos_sim = cls.sim(z1.unsqueeze(1), z2.unsqueeze(0))
     # Hard negative
     if num_sent >= 3:
@@ -200,7 +200,7 @@ def cl_forward(cls,
 
     labels = torch.arange(cos_sim.size(0)).long().to(cls.device)
     loss_fct = nn.CrossEntropyLoss()
-    
+
     # Calculate loss with hard negatives
     if num_sent == 3:
         # Note that weights are actually logits of weights
@@ -211,7 +211,7 @@ def cl_forward(cls,
         cos_sim = cos_sim + weights
 
     loss = loss_fct(cos_sim, labels)
-    
+
     # Calculate loss for MLM
     if mlm_outputs is not None and mlm_labels is not None:
         mlm_labels = mlm_labels.view(-1, mlm_labels.size(-1))
@@ -280,7 +280,7 @@ class BertForCL(BertPreTrainedModel):
         super().__init__(config)
         self.model_args = model_kargs["model_args"]
         self.bert = BertModel(config)
-        
+
         if self.model_args.do_mlm:
             self.lm_head = BertLMPredictionHead(config)
 
@@ -339,7 +339,7 @@ class RobertaForCL(RobertaPreTrainedModel):
         super().__init__(config)
         self.model_args = model_kargs["model_args"]
         self.roberta = RobertaModel(config)
-        
+
         if self.model_args.do_mlm:
             self.lm_head = RobertaLMHead(config)
 
