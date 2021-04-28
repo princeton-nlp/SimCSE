@@ -192,3 +192,9 @@ Please cite our paper if you use SimCSE in your work:
    year={2021}
 }
 ```
+
+## SimCSE elsewhere
+
+We thank the community's efforts for extending SimCSE!
+
+[Jianlin Su](https://github.com/bojone) has provided [a Chinese version of SimCSE](https://github.com/bojone/SimCSE). [AK391](https://github.com/AK391) has provided a [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) of SimCSE. [Nils Reimers](https://www.nils-reimers.de) has implemented a `sentence-transformers`-based [training code](https://colab.research.google.com/drive/1gAjXcI4uSxDE_IcvZdswFYVAo7XvPeoU?usp=sharing#scrollTo=UXUsikOc6oiB) for SimCSE.
