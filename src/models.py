@@ -42,10 +42,8 @@ class Similarity(nn.Module):
         self.temp = temp
         self.cos = nn.CosineSimilarity(dim=-1)
 
-    def forward(self, x, y, temp=None):
-        if temp is None:
-            temp = self.temp
-        return self.cos(x, y) / temp
+    def forward(self, x, y):
+        return self.cos(x, y) / self.temp
 
 
 class Pooler(nn.Module):
