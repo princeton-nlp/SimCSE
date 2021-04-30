@@ -110,7 +110,7 @@ Our evaluation code for sentence embeddings is based on a modified version of [S
 Before evaluation, please download the evaluation datasets by running
 ```bash
 cd SentEval/data/downstream/
-bash get_transfer_data.bash
+bash download_dataset.sh
 ```
 
 Then come back to the root directory, you can evaluate any `transformers`-based pre-trained models using our evaluation code. For example,
