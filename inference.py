@@ -37,7 +37,7 @@ class SentenceEmbedder(object):
                 keep_dim: bool = False) -> Union[ndarray, Tensor]:
 
         target_device = self.device if device is None else device
-        self.model.to(target_device)
+        self.model = self.model.to(target_device)
         
         single_sentence = False
         if isinstance(sentence, str):
@@ -46,7 +46,7 @@ class SentenceEmbedder(object):
         
         inputs = self.tokenizer(sentence, padding=True, truncation=True, return_tensors="pt")
         for feature in inputs:
-            inputs[feature].to(target_device)
+            inputs[feature] = inputs[feature].to(target_device)
         with torch.no_grad():
             embeddings = self.model(**inputs, output_hidden_states=True, return_dict=True).pooler_output.cpu()
         
@@ -159,7 +159,7 @@ class SentenceEmbedder(object):
             
             def pack_single_result(dist, idx):
                 score = [1.0 - d / 2.0 for d in dist]
-                results  = [(self.index["id2sentence"][i], s) for i, s in zip(idx, score)]
+                results  = [(self.index["id2sentence"][i], s) for i, s in zip(idx, score) if s >= threshold]
                 return results
             
             if isinstance(queries, list):
