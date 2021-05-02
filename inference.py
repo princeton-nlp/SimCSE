@@ -9,6 +9,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 from typing import List, Dict, Tuple, Type, Union
 
+logger = logging.getLogger(__name__)
+
 """
 A simple class used for several downstream zero-shot sentence embedding tasks:
 """
@@ -66,15 +68,17 @@ class SentenceEmbedder(object):
         
         query_vecs = self.encode(queries, device=device, return_numpy=True) # suppose N queries
         
-        if not isinstance(key_vecs, ndarray):
+        if not isinstance(keys, ndarray):
             key_vecs = self.encode(keys, device=device, return_numpy=True) # suppose M keys
-        
+        else:
+            key_vecs = keys
+
         # check whether N == 1 or M == 1
         single_query, single_key = len(query_vecs.shape) == 1, len(key_vecs.shape) == 1 
         if single_query:
-            query_vecs = query_vecs.reshape(-1,1)
+            query_vecs = query_vecs.reshape(1,-1)
         if single_key:
-            key_vecs = key_vecs.reshape(-1,1)
+            key_vecs = key_vecs.reshape(1,-1)
         
         # returns a N*M similarity array
         similarities = cosine_similarity(query_vecs, key_vecs)
@@ -88,8 +92,7 @@ class SentenceEmbedder(object):
     
     def build_index(self, sentences_or_file_path: Union[str, List[str]], 
                         use_faiss: bool = None,
-                        device: str = None,
-                        normalize: bool = False):
+                        device: str = None):
 
         if use_faiss is None or use_faiss == True:
             try:
@@ -108,7 +111,7 @@ class SentenceEmbedder(object):
                     sentences.append(line.strip())
             sentences_or_file_path = sentences
         
-        embeddings = self.encode(sentences, device=device, return_numpy=True, normalize=normalize)
+        embeddings = self.encode(sentences_or_file_path, device=device, return_numpy=True, normalize=use_faiss)
 
         id2sentence = {}
         for i, sentence in enumerate(sentences_or_file_path):
