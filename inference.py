@@ -196,7 +196,7 @@ if __name__=="__main__":
     print(similarities)
 
     print("\n=========Naive exact search============\n")
-    embedder.build_index(example_sentences)
+    embedder.build_index(example_sentences, use_faiss=False)
     results = embedder.search(example_queries)
     for i, result in enumerate(results):
         print("retrieval results for query: {}".format(example_queries[i]))
