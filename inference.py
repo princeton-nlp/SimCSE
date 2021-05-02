@@ -120,10 +120,10 @@ class SentenceEmbedder(object):
         
         if use_faiss:
             quantizer = faiss.IndexFlatL2(embeddings.shape[1])  
-            index = faiss.IndexIVFFlat(quantizer, embeddings.shape[1], self.num_cells) 
+            index = faiss.IndexIVFFlat(quantizer, embeddings.shape[1], min(self.num_cells, len(sentences_or_file_path))) 
             index.train(embeddings.astype(np.float32))
             index.add(embeddings.astype(np.float32))
-            index.nprobe = self.num_cells_in_search
+            index.nprobe = min(self.num_cells_in_search, len(sentences_or_file_path))
             self.index["index"] = index
             self.is_faiss_index = True
         else:
