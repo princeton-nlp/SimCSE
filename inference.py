@@ -58,7 +58,7 @@ class SentenceEmbedder(object):
         if single_sentence and not keep_dim:
             embeddings = embeddings[0]
         
-        if return_numpy:
+        if return_numpy and not isinstance(embeddings, ndarray):
             return embeddings.numpy()
         return embeddings
     
