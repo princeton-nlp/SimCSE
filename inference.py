@@ -121,8 +121,8 @@ class SentenceEmbedder(object):
         if use_faiss:
             quantizer = faiss.IndexFlatL2(embeddings.shape[1])  
             index = faiss.IndexIVFFlat(quantizer, embeddings.shape[1], self.num_cells) 
-            index.train(embeddings)
-            index.add(embeddings)
+            index.train(embeddings.astype(np.float32))
+            index.add(embeddings.astype(np.float32))
             index.nprobe = self.num_cells_in_search
             self.index["index"] = index
             self.is_faiss_index = True
@@ -154,7 +154,7 @@ class SentenceEmbedder(object):
         else:
             query_vecs = self.encode(queries, device=device, normalize_to_unit=True, keep_dim=True, return_numpy=True)
 
-            distance, idx = self.index["index"].search(query_vecs, top_k)
+            distance, idx = self.index["index"].search(query_vecs.astype(np.float32), top_k)
             
             def pack_single_result(dist, idx):
                 score = [1.0 - d / 2.0 for d in dist]
