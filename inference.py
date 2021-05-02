@@ -33,7 +33,7 @@ class SentenceEmbedder(object):
     def encode(self, sentence: Union[str, List[str]], 
                 device: str = None, 
                 return_numpy: bool = False,
-                normalize: bool = False,
+                normalize_to_unit: bool = False,
                 keep_dim: bool = False) -> Union[ndarray, Tensor]:
 
         target_device = self.device if device is None else device
@@ -50,7 +50,7 @@ class SentenceEmbedder(object):
         with torch.no_grad():
             embeddings = self.model(**inputs, output_hidden_states=True, return_dict=True).pooler_output.cpu()
         
-        if normalize:
+        if normalize_to_unit:
             embeddings = normalize(embeddings, axis=1)
             if not return_numpy:
                 embeddings = Tensor(embeddings)
@@ -111,7 +111,7 @@ class SentenceEmbedder(object):
                     sentences.append(line.strip())
             sentences_or_file_path = sentences
         
-        embeddings = self.encode(sentences_or_file_path, device=device, return_numpy=True, normalize=use_faiss)
+        embeddings = self.encode(sentences_or_file_path, device=device, return_numpy=True, normalize_to_unit=use_faiss)
 
         id2sentence = {}
         for i, sentence in enumerate(sentences_or_file_path):
@@ -132,7 +132,6 @@ class SentenceEmbedder(object):
     
     def search(self, queries: Union[str, List[str]], 
                 device: str = None, 
-                normalize: bool = False,
                 threshold: float = 0.6,
                 top_k: int = 5) -> Union[List[Tuple[str, float]], List[List[Tuple[str, float]]]]:
         
@@ -140,7 +139,7 @@ class SentenceEmbedder(object):
             if isinstance(queries, list):
                 combined_results = []
                 for query in queries:
-                    results = self.search(query, device, normalize)
+                    results = self.search(query, device)
                     combined_results.append(results)
                 return combined_results
             
@@ -153,7 +152,7 @@ class SentenceEmbedder(object):
             results = [(self.index["id2sentence"][idx], score) for idx, score in id_and_score]
             return results
         else:
-            query_vecs = self.encode(queries, device=device, normalize=normalize, keep_dim=True, return_numpy=True)
+            query_vecs = self.encode(queries, device=device, normalize_to_unit=True, keep_dim=True, return_numpy=True)
 
             distance, idx = self.index["index"].search(query_vecs, top_k)
             
