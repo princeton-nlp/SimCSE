@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 from typing import Optional, Union, List, Dict, Tuple
 import torch
 import collections
-import ast
 import random
 
 from datasets import load_dataset
