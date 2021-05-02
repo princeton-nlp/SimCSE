@@ -188,7 +188,7 @@ if __name__=="__main__":
         'a woman is making a photo'
     ]
 
-    model_name = "princeton-nlp/sup-simcse-roberta-base"
+    model_name = "princeton-nlp/sup-simcse-bert-base-uncased"
     embedder = SentenceEmbedder(model_name)
 
     print("\n=========Calculate cosine similarities between queries and sentences============\n")
