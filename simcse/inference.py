@@ -1,4 +1,5 @@
 import logging
+from tqdm import tqdm
 import numpy as np
 from numpy import ndarray
 import torch
@@ -9,6 +10,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 from typing import List, Dict, Tuple, Type, Union
 
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s', datefmt='%m/%d/%Y %H:%M:%S',
+                    level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 """
@@ -92,7 +95,8 @@ class SentenceEmbedder(object):
     
     def build_index(self, sentences_or_file_path: Union[str, List[str]], 
                         use_faiss: bool = None,
-                        device: str = None):
+                        device: str = None,
+                        batch_size: int = 64):
 
         if use_faiss is None or use_faiss == True:
             try:
@@ -111,7 +115,13 @@ class SentenceEmbedder(object):
                     sentences.append(line.strip())
             sentences_or_file_path = sentences
         
-        embeddings = self.encode(sentences_or_file_path, device=device, return_numpy=True, normalize_to_unit=use_faiss)
+        embeddings = []
+        logger.info("Building Index...")
+        logger.info("Generating Embeddings for Target Sentences...")
+        for i in tqdm(range(0, len(sentences_or_file_path), batch_size)):
+            batch_embeddings = self.encode(sentences_or_file_path[i:i + batch_size], device=device, return_numpy=True, normalize_to_unit=use_faiss)
+            embeddings.append(batch_embeddings)
+        embeddings = np.vstack(embeddings)
 
         id2sentence = {}
         for i, sentence in enumerate(sentences_or_file_path):
@@ -121,6 +131,7 @@ class SentenceEmbedder(object):
         if use_faiss:
             quantizer = faiss.IndexFlatL2(embeddings.shape[1])  
             index = faiss.IndexIVFFlat(quantizer, embeddings.shape[1], min(self.num_cells, len(sentences_or_file_path))) 
+            logger.info("Train and Insert Embeddings to Faiss Index...")
             index.train(embeddings.astype(np.float32))
             index.add(embeddings.astype(np.float32))
             index.nprobe = min(self.num_cells_in_search, len(sentences_or_file_path))

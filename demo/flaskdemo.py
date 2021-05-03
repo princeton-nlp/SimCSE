@@ -18,14 +18,14 @@ from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
-from inference import SentenceEmbedder
+from simcse import SentenceEmbedder
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s', datefmt='%m/%d/%Y %H:%M:%S',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def run_simcse_demo(port, args):
-    app = Flask(__name__, static_folder='./demo/static')
+    app = Flask(__name__, static_folder='./static')
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
     CORS(app)
 

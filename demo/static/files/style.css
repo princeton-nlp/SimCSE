@@ -6,10 +6,11 @@ label, footer { user-select: none; }
 
 .list-group-item:first-of-type {
   background-color: #fff;
-  color: #000000;
+  border-left-color: #fff;
+  border-right-color: #fff;
 }
 .list-group-mine .list-group-item {
-  background-color: #DFDFDF;
+  background-color: #fff;
   border-left-color: #fff;
   border-right-color: #fff;
 }
