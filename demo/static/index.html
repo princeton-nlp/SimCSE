@@ -30,7 +30,7 @@
     </div>
     <div class="list-group-item">
         <div class="paper_title">
-        <strong><h2>SimCSE: Simple Contrastive Learning of Sentence Embeddings</h2></strong>
+        <strong><h2>Simple Contrastive Learning of Sentence Embeddings</h2></strong>
         <a target="_blank" href="https://gaotianyu.xyz/about/">Tianyu Gao</a>&nbsp;&nbsp;<a target="_blank" href="https://github.com/yaoxingcheng">Xingcheng Yao</a>&nbsp;&nbsp;<a target="_blank" href="https://www.cs.princeton.edu/~danqic/">Danqi Chen</a><br/>
         Princeton University&nbsp;&nbsp;Tsinghua University<br/>
         </div>
@@ -41,7 +41,7 @@
         <div class="detail2">
             <ul>
               <li>Retrieved sentences are coming from STS-Benchmark dataset</li>
-              <li>Only sentences with cosine similarity larger than 0.6 will be displayed, at most 5 sentences will be retreived</li>
+              <li>Two hyperparameters can be adjusted: (1) Top-K: the maximum number of sentences to be displayed (2) Threshold: the minimum similarity score for a sentence to be retrieved </li>
               <li>We use Faiss to accelerate the sentence retrieval process</li>
             </ul>
             </div>
@@ -71,6 +71,14 @@
 
     <div class="row" style="margin-top:8px">
         <div id="ret-time" class="text-secondary ml-1 col"></div>
+        <div class="custom-control mr-6">
+            <div id="top_k_value">Top K: 5</div>
+            <input type="range" class="custom-range small" id="top_k" min="1" max="30" value="5">
+        </div>
+        <div class="custom-control mr-3">
+            <div id="threshold_value">Threshold: 0.6</div>
+            <input type="range" class="custom-range small" id="threshold" min="0.0" max="1.0" value="0.6" step="0.01">
+        </div>
     </div>
 
     <br/>
@@ -85,16 +93,26 @@
 </div>
 
 <script>
-    var tout_id = 10;
+    var last_timestamp = new Date().getTime();
+
+    $(function(){
+        $('#threshold').bind('input propertychange', function() {  
+            $('#threshold_value').html("Threshold: " + $(this).val());
+            last_timestamp = new Date().getTime(); 
+        }); 
+        $('#top_k').bind('input propertychange', function() {  
+            $('#top_k_value').html("Top K: " + $(this).val()); 
+            last_timestamp = new Date().getTime();
+        });  
+        $('#threshold').on('change', function() {  
+            $("#search").click();
+        }); 
+        $('#top_k').on('change', function() {  
+            $("#search").click();
+        }); 
+    });
 
     $("#question").keypress(function (e) {
-        // console.log(e.which)
-        var is_real = $("#realtime_chk").is(":checked") == true;
-        if (is_real) {
-            if (e.which == 32) {
-                $("#search").click();
-            }
-        }
         if (e.which == 13 || e.which == 63) {
             $("#search").click();
         }
@@ -102,6 +120,7 @@
 
     $("#search").click(function () {
         var query = $("#question").val();
+        var current_timestamp = new Date().getTime();
         if (query.trim().length > 0) {
             execute(query);
         } else {
@@ -115,12 +134,11 @@
     }
 
     function execute(text) {
-        // $("#ret-time").text("Latency: ");
         var start_time = +new Date();
-        $.get("/api?query=" + encodeURIComponent(text), function (out) {
+        $.get("/api?query=" + encodeURIComponent(text) + "&topk=" + $("#top_k").val() + "&threshold=" + $("#threshold").val(), function (out) {
             var end_time = +new Date();
             var total_latency = end_time - start_time;
-            $("#ret-time").text(out['ret'].length + " results (" + out['time'] + "ms)"); // + "for \"" + text + "\"");
+            $("#ret-time").text(out['ret'].length + " results (" + out['time'] + "ms)");
             $("#ret-results").empty();
             result = out['ret']
             for (var i = 0; i < result.length; i++) {

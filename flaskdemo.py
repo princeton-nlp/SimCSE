@@ -40,8 +40,10 @@ def run_simcse_demo(port, args):
     @app.route('/api', methods=['GET'])
     def api():
         query = request.args['query']
+        top_k = int(request.args['topk'])
+        threshold = float(request.args['threshold'])
         start = time()
-        results = embedder.search(query)
+        results = embedder.search(query, top_k=top_k, threshold=threshold)
         ret = []
         out = {}
         for sentence, score in results:
@@ -50,9 +52,11 @@ def run_simcse_demo(port, args):
         out['ret'] = ret
         out['time'] = "{:.4f}".format(span)
         return jsonify(out)
+
     @app.route('/files/<path:path>')
     def static_files(path):
         return app.send_static_file('files/' + path)
+        
     @app.route('/get_examples', methods=['GET'])
     def get_examples():
         with open(query_path, 'r') as fp:
