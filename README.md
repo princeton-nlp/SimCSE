@@ -185,7 +185,7 @@ If you have any questions related to the code or the paper, feel free to email T
 
 Please cite our paper if you use SimCSE in your work:
 
-```
+```bibtex
 @article{gao2021simcse,
    title={{SimCSE}: Simple Contrastive Learning of Sentence Embeddings},
    author={Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
