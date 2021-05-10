@@ -23,6 +23,7 @@ We anticipate the code will be out * **in one week** *. -->
   - [Requirements](#requirements)
   - [Evaluation](#evaluation)
   - [Training](#training)
+  - [Inference](#inference)
   - [Bugs or Questions?](#Bugs-or-questions)
   - [Citation](#citation)
   - [SimCSE Elsewhere](#simcse-elsewhere)
@@ -176,6 +177,34 @@ All the other arguments are standard Huggingface's `transformers` training argum
 ### Convert models
 
 **IMPORTANT**: Our saved checkpoints are slightly different from Huggingface's pre-trained checkpoints. Run `python simcse_to_huggingface.py --path {PATH_TO_CHECKPOINT_FOLDER}` to convert it. After that, you can evaluate it by our [evaluation](#evaluation) code or directly use it [out of the box](#use-our-models-out-of-the-box).
+
+## Inference
+
+We provide simple interfaces for SimCSE to do zero-shot inference for sentence similarity calculation or vector space retrieval. To enable the use of these interfaces globally in your environment, simply run
+```bash
+python setup.py develop
+``` 
+Here's a simple example to infer with pre-trained SimCSE given two set of sentences, using our provided interface
+```python
+from simcse import SentenceEmbedder
+example_sentences_a = ['a woman is reading','a man plays a guitar']
+example_sentences_b = ['a man is playing music','a woman is making a photo']
+
+# load pre-trained models by name or model path
+embedder = SentenceEmbedder("princeton-nlp/sup-simcse-bert-base-uncased")
+
+# encode list of sentences to dense vectors
+embeddings = embedder.encode(example_sentences_a)
+
+# calculate the pair-wise semantic similarity between two set of sentences
+similarities = embedder.similarity(example_sentences_a, example_sentences_b)
+
+# use the first set of sentences as keys and the second set of sentences as querys 
+# for vector space retrieval
+embedder.build_index(example_sentences_a)
+results = embedder.search(example_sentences_b)
+```
+The inference of trained SimCSE can enable several applications. Check our [demo](./demo/README.md#demo_of_simcse) to see how our models can be directly utilized.
 
 ## Bugs or questions?
 
