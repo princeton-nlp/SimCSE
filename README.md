@@ -11,6 +11,7 @@ Wait a minute! The authors are working day and night 💪, to make the code and 
 We anticipate the code will be out * **in one week** *. -->
 
 <!-- * 4/26: SimCSE is now on [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) (Thanks [@AK391](https://github.com/AK391)!). Try it out! -->
+* 5/10: We released our [inference interface and demo code](#inference).
 * 4/23: We released our [training code](#training).
 * 4/20: We released our [model checkpoints](#use-our-models-out-of-the-box) and [evaluation code](#evaluation).
 * 4/18: We released [our paper](https://arxiv.org/pdf/2104.08821.pdf). Check it out!
@@ -204,7 +205,7 @@ similarities = embedder.similarity(example_sentences_a, example_sentences_b)
 embedder.build_index(example_sentences_a)
 results = embedder.search(example_sentences_b)
 ```
-The inference of trained SimCSE can enable several applications. Check our [demo](./demo/README.md#demo_of_simcse) to see how our models can be directly utilized.
+The inference of trained SimCSE can enable several applications. Check our [demo](./demo) to see how our models can be directly utilized.
 
 ## Bugs or questions?
 
