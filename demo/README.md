@@ -1,9 +1,11 @@
 ## Demo of SimCSE 
 Several demos are available for people to play with our pre-trained SimCSE.
+
 ### Flask Demo
 <div align="center">
 <img src="../figure/demo.gif" width="750">
 </div>
+
 We provide a simple Web demo based on [flask](https://github.com/pallets/flask) to show how SimCSE can be directly used for information retrieval. To run this flask demo locally, make sure the SimCSE inference interfaces are setup:
 ```bash
 git clone https://github.com/princeton-nlp/SimCSE
