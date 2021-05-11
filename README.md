@@ -17,14 +17,16 @@ We anticipate the code will be out * **in one week** *. -->
 * 4/18: We released [our paper](https://arxiv.org/pdf/2104.08821.pdf). Check it out!
 
 
-## Quick links
+## Quick Links
 
   - [Overview](#overview)
-  - [Pre-trained sentence embeddings](#use-our-models-out-of-the-box)
-  - [Requirements](#requirements)
-  - [Evaluation](#evaluation)
-  - [Training](#training)
-  - [Inference](#inference)
+  - [Getting Started](#getting-started)
+  - [Model List](#model-list)
+  - [Use SimCSE with Huggingface](#use-our-models-out-of-the-box)
+  - [Train SimCSE](#train-simcse)
+    - [Requirements](#requirements)
+    - [Evaluation](#evaluation)
+    - [Training](#training)
   - [Bugs or Questions?](#Bugs-or-questions)
   - [Citation](#citation)
   - [SimCSE Elsewhere](#simcse-elsewhere)
@@ -35,23 +37,70 @@ We propose a simple contrastive learning framework that works with both unlabele
 
 ![](figure/model.png)
 
+## Getting Started
 
-## Use our models out of the box
-Our pre-trained models are now publicly available with [HuggingFace's Transformers](https://github.com/huggingface/transformers). Models and their performance are presented as follows:
+We provide a easy-to-use sentence embedding tool based on our SimCSE model. To use the tool, first install the `simcse` package from pypi
+```bash
+pip install simcse
+```
+
+Or directly install it from our code
+```bash
+python setup.py install
+```
+
+Now you can load our model by just one line of code
+```python
+from simcse import SimCSE
+model = SimCSE("princeton-nlp/sup-simcse-bert-base-uncased")
+```
+See [model list](#model-list) for a full list of available models. 
+
+Then you can use our model for **encoding sentences into embeddings**
+```python
+embeddings = model.encode("A woman is reading.")
+```
+
+**Compute the cosine similarities** between two groups of sentences
+```python
+sentences_a = ['A woman is reading.','A man is playing a guitar.']
+sentences_b = ['He plays guitar.','A woman is making a photo.']
+similarities = model.similarity(sentences_a, sentences_b)
+```
+
+Or build index for a group of sentences and **search** among them
+```python
+sentences = ['A woman is reading.','A man is playing a guitar.']
+model.build_index(sentences)
+results = model.search("He plays guitar.")
+```
+
+We also support [faiss](https://github.com/facebookresearch/faiss), an efficient similarity search library. Just install the package following [instructions](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md) here and change the above index code to
+```python
+model.build_index(sentences, use_faiss=True)
+```
+
+We also provide an easy-to-build [demo website](./demo) to show how SimCSE can be used in sentence retrieval.
+
+## Model list
+
+Our released models are listed as following. You can import these models by using the `simcse` package or using [HuggingFace's Transformers](https://github.com/huggingface/transformers). 
 |              Model              | Avg. STS |
-|:-------------------------------:|:--------:|
-|  [unsup-simcse-bert-base-uncased](https://huggingface.co/princeton-nlp/unsup-simcse-bert-base-uncased) |   74.54  |
-| [unsup-simcse-bert-large-uncased](https://huggingface.co/princeton-nlp/unsup-simcse-bert-large-uncased) |   76.05  |
-|    [unsup-simcse-roberta-base](https://huggingface.co/princeton-nlp/unsup-simcse-roberta-base)    |   76.50  |
-|    [unsup-simcse-roberta-large](https://huggingface.co/princeton-nlp/unsup-simcse-roberta-large)   |   77.47  |
-|   [sup-simcse-bert-base-uncased](https://huggingface.co/princeton-nlp/sup-simcse-bert-base-uncased)  |   81.57  |
-|  [sup-simcse-bert-large-uncased](https://huggingface.co/princeton-nlp/sup-simcse-bert-large-uncased)  |   82.21  |
-|     [sup-simcse-roberta-base](https://huggingface.co/princeton-nlp/sup-simcse-roberta-base)     |   82.52  |
-|     [sup-simcse-roberta-large](https://huggingface.co/princeton-nlp/sup-simcse-roberta-large)    |   83.76  |
+|:-------------------------------|:--------:|
+|  [princeton-nlp/unsup-simcse-bert-base-uncased](https://huggingface.co/princeton-nlp/unsup-simcse-bert-base-uncased) |   74.54  |
+| [princeton-nlp/unsup-simcse-bert-large-uncased](https://huggingface.co/princeton-nlp/unsup-simcse-bert-large-uncased) |   76.05  |
+|    [princeton-nlp/unsup-simcse-roberta-base](https://huggingface.co/princeton-nlp/unsup-simcse-roberta-base)    |   76.50  |
+|    [princeton-nlp/unsup-simcse-roberta-large](https://huggingface.co/princeton-nlp/unsup-simcse-roberta-large)   |   77.47  |
+|   [princeton-nlp/sup-simcse-bert-base-uncased](https://huggingface.co/princeton-nlp/sup-simcse-bert-base-uncased)  |   81.57  |
+|  [princeton-nlp/sup-simcse-bert-large-uncased](https://huggingface.co/princeton-nlp/sup-simcse-bert-large-uncased)  |   82.21  |
+|     [princeton-nlp/sup-simcse-roberta-base](https://huggingface.co/princeton-nlp/sup-simcse-roberta-base)     |   82.52  |
+|     [princeton-nlp/sup-simcse-roberta-large](https://huggingface.co/princeton-nlp/sup-simcse-roberta-large)    |   83.76  |
 
 **Naming rules**: `unsup` and `sup` represent "unsupervised" (trained on Wikipedia corpus) and "supervised" (trained on NLI datasets) respectively.
 
-You can easily import our model in an out-of-the-box way with HuggingFace's API:
+## Use SimCSE with Huggingface
+
+Besides using our provided sentence embedding tool, you can also easily import our model with HuggingFace's `transformers`:
 ```python
 import torch
 from scipy.spatial.distance import cosine
@@ -84,9 +133,11 @@ print("Cosine similarity between \"%s\" and \"%s\" is: %.3f" % (texts[0], texts[
 
 If you encounter any problem when directly loading the models by HuggingFace's API, you can also download the models manually from the above table and use `model = AutoModel.from_pretrained({PATH TO THE DOWNLOAD MODEL})`.
 
-If you only want to use our models in an out-of-the-box way, just installing the latest version of `torch`, `transformers` and `scipy` is enough. If you want to use our training or evaluation code, see the requirement section below.
+## Train SimCSE
 
-## Requirements
+In the following section, we describe how to train a SimCSE model by using our code.
+
+### Requirements
 
 First, install PyTorch by following the instructions from [the official website](https://pytorch.org). To faithfully reproduce our results, please use the correct `1.7.1` version corresponding to your platforms/CUDA versions. PyTorch version higher than `1.7.1` should also work. For example, if you use Linux and **CUDA11** ([how to check CUDA version](https://varhowto.com/check-cuda-version/)), install PyTorch by the following command,
 
@@ -107,7 +158,7 @@ Then run the following script to install the remaining dependencies,
 pip install -r requirements.txt
 ```
 
-## Evaluation
+### Evaluation
 Our evaluation code for sentence embeddings is based on a modified version of [SentEval](https://github.com/facebookresearch/SentEval). It evaluates sentence embeddings on semantic textual similarity (STS) tasks and downstream transfer tasks. For STS tasks, our evaluation takes the "all" setting, and report Spearman's correlation. See [our paper](https://arxiv.org/pdf/2104.08821.pdf) (Appendix B) for evaluation details.
 
 Before evaluation, please download the evaluation datasets by running
@@ -154,13 +205,13 @@ Arguments for the evaluation script are as follows,
     * `na`: Manually set tasks by `--tasks`.
 * `--tasks`: Specify which dataset(s) to evaluate on. Will be overridden if `--task_set` is not `na`. See the code for a full list of tasks.
 
-## Training
+### Training
 
-### Data
+#### Data
 
 For unsupervised SimCSE, we sample 1 million sentences from English Wikipedia; for supervised SimCSE, we use the SNLI and MNLI datasets. You can run `data/download_wiki.sh` and `data/download_nli.sh` to download the two datasets.
 
-### Training scripts
+#### Training scripts
 
 We provide example training scripts for both unsupervised and supervised SimCSE. In `run_unsup_example.sh`, we provide a single-GPU (or CPU) example for the unsupervised version, and in `run_sup_example.sh` we give a **multiple-GPU** example for the supervised version. Both scripts call `train.py` for training. We explain the arguments in following:
 * `--train_file`: Training file path. We support "txt" files (one line for one sentence) and "csv" files (2-column: pair data with no hard negative; 3-column: pair data with one corresponding hard negative instance). You can use our provided Wikipedia or NLI data, or you can use your own data with the same format.
@@ -176,37 +227,11 @@ All the other arguments are standard Huggingface's `transformers` training argum
 
 **REPRODUCTION**: For results in the paper, we use Nvidia 3090 GPUs with CUDA 11. Using different types of devices or different versions of CUDA/other softwares may lead to slightly different performance.
 
-### Convert models
+#### Convert models
 
 **IMPORTANT**: Our saved checkpoints are slightly different from Huggingface's pre-trained checkpoints. Run `python simcse_to_huggingface.py --path {PATH_TO_CHECKPOINT_FOLDER}` to convert it. After that, you can evaluate it by our [evaluation](#evaluation) code or directly use it [out of the box](#use-our-models-out-of-the-box).
 
-## Inference
 
-We provide simple interfaces for SimCSE to do zero-shot inference for sentence similarity calculation or vector space retrieval. To enable the use of these interfaces globally in your environment, simply run
-```bash
-python setup.py develop
-``` 
-Here's a simple example to infer with pre-trained SimCSE given two set of sentences, using our provided interface
-```python
-from simcse import SentenceEmbedder
-example_sentences_a = ['a woman is reading','a man plays a guitar']
-example_sentences_b = ['a man is playing music','a woman is making a photo']
-
-# load pre-trained models by name or model path
-embedder = SentenceEmbedder("princeton-nlp/sup-simcse-bert-base-uncased")
-
-# encode list of sentences to dense vectors
-embeddings = embedder.encode(example_sentences_a)
-
-# calculate the pair-wise semantic similarity between two set of sentences
-similarities = embedder.similarity(example_sentences_a, example_sentences_b)
-
-# use the first set of sentences as keys and the second set of sentences as querys 
-# for vector space retrieval
-embedder.build_index(example_sentences_a)
-results = embedder.search(example_sentences_b)
-```
-The inference of trained SimCSE can enable several applications. Check our [demo](./demo) to see how our models can be directly utilized.
 
 ## Bugs or questions?
 

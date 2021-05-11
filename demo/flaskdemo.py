@@ -18,7 +18,7 @@ from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
-from simcse import SentenceEmbedder
+from simcse import SimCSE
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s', datefmt='%m/%d/%Y %H:%M:%S',
                     level=logging.INFO)
@@ -31,7 +31,7 @@ def run_simcse_demo(port, args):
 
     sentence_path = os.path.join(args.sentences_dir, args.example_sentences)
     query_path = os.path.join(args.sentences_dir, args.example_query)
-    embedder = SentenceEmbedder(args.model_name_or_path)
+    embedder = SimCSE(args.model_name_or_path)
     embedder.build_index(sentence_path)
     @app.route('/')
     def index():

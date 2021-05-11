@@ -106,7 +106,6 @@ class SimCSE(object):
     def build_index(self, sentences_or_file_path: Union[str, List[str]], 
                         use_faiss: bool = None,
                         faiss_fast: bool = False,
-                        faiss_gpu: bool = False,
                         device: str = None,
                         batch_size: int = 64):
 
@@ -139,10 +138,17 @@ class SimCSE(object):
                 index = faiss.IndexIVFFlat(quantizer, embeddings.shape[1], min(self.num_cells, len(sentences_or_file_path))) 
             else:
                 index = quantizer
-            if faiss_gpu: 
-                res = faiss.StandardGpuResources()
-                res.setTempMemory(20 * 1024 * 1024 * 1024)
-                index = faiss.index_cpu_to_gpu(res, 0, index)
+
+            if (self.device == "cuda" and device != "cpu") or device == "cuda":
+                if hasattr(faiss, "StandardGpuResources"):
+                    logger.info("Use GPU-version faiss")
+                    res = faiss.StandardGpuResources()
+                    res.setTempMemory(20 * 1024 * 1024 * 1024)
+                    index = faiss.index_cpu_to_gpu(res, 0, index)
+                else:
+                    logger.info("Use CPU-version faiss")
+            else: 
+                logger.info("Use CPU-version faiss")
 
             if faiss_fast:            
                 index.train(embeddings.astype(np.float32))
