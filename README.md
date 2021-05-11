@@ -11,7 +11,7 @@ Wait a minute! The authors are working day and night 💪, to make the code and 
 We anticipate the code will be out * **in one week** *. -->
 
 <!-- * 4/26: SimCSE is now on [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) (Thanks [@AK391](https://github.com/AK391)!). Try it out! -->
-* 5/10: We released our [inference interface and demo code](#inference).
+* 5/10: We released our [sentence embedding tool and demo code](#inference).
 * 4/23: We released our [training code](#training).
 * 4/20: We released our [model checkpoints](#use-our-models-out-of-the-box) and [evaluation code](#evaluation).
 * 4/18: We released [our paper](https://arxiv.org/pdf/2104.08821.pdf). Check it out!
@@ -34,6 +34,7 @@ We anticipate the code will be out * **in one week** *. -->
 We propose a simple contrastive learning framework that works with both unlabeled and labeled data. Unsupervised SimCSE simply takes an input sentence and predicts itself in a contrastive learning framework, with only standard dropout used as noise. Our supervised SimCSE incorporates annotated pairs from NLI datasets into contrastive learning by using `entailment` pairs as positives and `contradiction` pairs as hard negatives. The following figure is an illustration of our models.
 
 ![](figure/model.png)
+
 
 ## Use our models out of the box
 Our pre-trained models are now publicly available with [HuggingFace's Transformers](https://github.com/huggingface/transformers). Models and their performance are presented as follows:

@@ -1,1 +1,1 @@
-from .inference import SentenceEmbedder
+from .tool import SimCSE
