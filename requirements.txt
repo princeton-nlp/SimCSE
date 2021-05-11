@@ -6,3 +6,4 @@ scikit-learn==0.24.0
 prettytable==2.1.0
 gradio
 torch
+setuptools==49.3.0

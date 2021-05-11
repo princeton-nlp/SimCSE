@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 from typing import Optional, Union, List, Dict, Tuple
 import torch
 import collections
-import ast
 import random
 
 from datasets import load_dataset
@@ -35,13 +34,12 @@ from transformers.tokenization_utils_base import BatchEncoding, PaddingStrategy,
 from transformers.trainer_utils import is_main_process
 from transformers.data.data_collator import DataCollatorForLanguageModeling
 from transformers.file_utils import cached_property, torch_required, is_torch_available, is_torch_tpu_available
-from src.models import RobertaForCL, BertForCL
-from src.trainers import CLTrainer
+from simcse.models import RobertaForCL, BertForCL
+from simcse.trainers import CLTrainer
 
 logger = logging.getLogger(__name__)
 MODEL_CONFIG_CLASSES = list(MODEL_FOR_MASKED_LM_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
-SENT_MASK_TOKEN = "NO_SENT"
 
 @dataclass
 class ModelArguments:

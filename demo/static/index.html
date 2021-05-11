@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>SimCSE</title>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="files/style.css">
+<link rel="shortcut icon" href="files/plogo.png">
+
+<script src="files/all.js"></script>
+<script src="files/jquery-3.3.1.min.js"></script>
+<script src="files/popper.min.js"></script>
+<script src="files/bootstrap.min.js"></script>
+
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+	<a class="navbar-brand" href="">SimCSE</a>
+    <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" target="_blank" href="https://arxiv.org/abs/2104.08821">Paper</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" target="_blank" href="https://github.com/princeton-nlp/SimCSE">Code</a>
+        </li>
+    </ul>
+</nav>
+
+    <div class="list-group-mine">
+    </div>
+    <div class="list-group-item">
+        <div class="paper_title">
+        <strong><h2>Simple Contrastive Learning of Sentence Embeddings</h2></strong>
+        <a target="_blank" href="https://gaotianyu.xyz/about/">Tianyu Gao</a>&nbsp;&nbsp;<a target="_blank" href="https://github.com/yaoxingcheng">Xingcheng Yao</a>&nbsp;&nbsp;<a target="_blank" href="https://www.cs.princeton.edu/~danqic/">Danqi Chen</a><br/>
+        Princeton University&nbsp;&nbsp;Tsinghua University<br/>
+        </div>
+        <div class="detail">
+        <hr/>
+        SimCSE is a novel framework for contrastive learning of sentence embeddings. This demo shows how our pre-trained sentence embeddings can be directly applied to sentence retrieval tasks. You can type any natural language sentences and click the search button to see which sentences in the example database are semantically similar to the provided sentence. Here are some details about this demo:
+        </div>
+        <div class="detail2">
+            <ul>
+              <li>Retrieved sentences are coming from STS-Benchmark dataset</li>
+              <li>Two hyperparameters can be adjusted: (1) Top-K: the maximum number of sentences to be displayed (2) Threshold: the minimum similarity score for a sentence to be retrieved </li>
+              <li>We use Faiss to accelerate the sentence retrieval process</li>
+            </ul>
+            </div>
+    </div>
+
+<div class="container" id="container">
+    <!-- Default inline 1-->
+
+    <div class="input-group mb-1 mt-4">
+        <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">Examples
+            </button>
+            <div class="dropdown-menu" id="examples">
+            </div>
+        </div>
+
+        <input id="question" type="text" class="form-control" placeholder="Write a sentence" autocomplete="off"
+               aria-label="Write a sentence"
+               autofocus>
+        <div class="input-group-append">
+            <button id="search" class="btn btn-secondary" type="button">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:8px">
+        <div id="ret-time" class="text-secondary ml-1 col"></div>
+        <div class="custom-control mr-6">
+            <div id="top_k_value">Top K: 5</div>
+            <input type="range" class="custom-range small" id="top_k" min="1" max="30" value="5">
+        </div>
+        <div class="custom-control mr-3">
+            <div id="threshold_value">Threshold: 0.6</div>
+            <input type="range" class="custom-range small" id="threshold" min="0.0" max="1.0" value="0.6" step="0.01">
+        </div>
+    </div>
+
+    <br/>
+
+
+    <div class="card">
+        <ul id="ret-results" class="list-group list-group-flush">
+            <li class="list-group-item"></li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    var last_timestamp = new Date().getTime();
+
+    $(function(){
+        $('#threshold').bind('input propertychange', function() {  
+            $('#threshold_value').html("Threshold: " + $(this).val());
+            last_timestamp = new Date().getTime(); 
+        }); 
+        $('#top_k').bind('input propertychange', function() {  
+            $('#top_k_value').html("Top K: " + $(this).val()); 
+            last_timestamp = new Date().getTime();
+        });  
+        $('#threshold').on('change', function() {  
+            $("#search").click();
+        }); 
+        $('#top_k').on('change', function() {  
+            $("#search").click();
+        }); 
+    });
+
+    $("#question").keypress(function (e) {
+        if (e.which == 13 || e.which == 63) {
+            $("#search").click();
+        }
+    });
+
+    $("#search").click(function () {
+        var query = $("#question").val();
+        var current_timestamp = new Date().getTime();
+        if (query.trim().length > 0) {
+            execute(query);
+        } else {
+            init_result();
+        }
+    });
+
+    function init_result() {
+        $("#ret-time").text("");
+        $("#ret-results").html("<li class=\"list-group-item\"></li>");
+    }
+
+    function execute(text) {
+        var start_time = +new Date();
+        $.get("/api?query=" + encodeURIComponent(text) + "&topk=" + $("#top_k").val() + "&threshold=" + $("#threshold").val(), function (out) {
+            var end_time = +new Date();
+            var total_latency = end_time - start_time;
+            $("#ret-time").text(out['ret'].length + " results (" + out['time'] + "ms)");
+            $("#ret-results").empty();
+            result = out['ret']
+            for (var i = 0; i < result.length; i++) {
+                $("#ret-results").append("<li class=\"list-group-item\"><div class=\"row\">"
+                    + "<div class=\"col-10\">" + result[i]["sentence"] + "</div>"
+                    + "<div class=\"col-2 text-right\">"
+                        + "<div class=\"score row-1\"> <em>similarity=" + result[i]["score"].toFixed(4) + "</em></div>"
+                    + "</div>"
+                    + "</div></li>")
+            }
+        });
+    }
+
+    $.getJSON("/get_examples", function (examples) {
+        for (let example of examples) {
+            $('#examples').append("<a class=\"dropdown-item\" href=\"#\">" + example + "</a>");
+        }
+    });
+
+    $("#container").on("click", ".dropdown-item", function (event) {
+        $('#question').val($(event.target).text());
+        $('#question').focus();
+        $("#search").click();
+    });
+
+
+</script>
+
+</body>
+
+</html>
