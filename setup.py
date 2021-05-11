@@ -13,7 +13,7 @@ setup(
     author='Tianyu Gao, Xingcheng Yao, Danqi Chen',
     author_email='tianyug@cs.princeton.edu',
     url='https://github.com/princeton-nlp/SimCSE',
-    download_url='',
+    download_url='https://github.com/princeton-nlp/SimCSE/archive/refs/tags/0.1.tar.gz',
     keywords=['sentence', 'embedding', 'simcse', 'nlp'],
     install_requires=[
         "tqdm",
