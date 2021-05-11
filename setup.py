@@ -22,6 +22,5 @@ setup(
         "torch",
         "numpy>=1.19.5,<1.20",
         "setuptools"
-    ],
-    long_description=readme,
+    ]
 )
