@@ -39,7 +39,7 @@ We propose a simple contrastive learning framework that works with both unlabele
 
 ## Getting Started
 
-We provide a easy-to-use sentence embedding tool based on our SimCSE model. To use the tool, first install the `simcse` package from pypi
+We provide an easy-to-use sentence embedding tool based on our SimCSE model. To use the tool, first install the `simcse` package from pypi
 ```bash
 pip install simcse
 ```
@@ -49,7 +49,9 @@ Or directly install it from our code
 python setup.py install
 ```
 
-Now you can load our model by just one line of code
+Note that if you want to enable GPU encoding, you should install the correct version of PyTorch that supports CUDA. See [PyTorch official website](https://pytorch.org) for instructions.
+
+After installing the package, you can load our model by just two lines of code
 ```python
 from simcse import SimCSE
 model = SimCSE("princeton-nlp/sup-simcse-bert-base-uncased")
@@ -63,26 +65,25 @@ embeddings = model.encode("A woman is reading.")
 
 **Compute the cosine similarities** between two groups of sentences
 ```python
-sentences_a = ['A woman is reading.','A man is playing a guitar.']
-sentences_b = ['He plays guitar.','A woman is making a photo.']
+sentences_a = ['A woman is reading.', 'A man is playing a guitar.']
+sentences_b = ['He plays guitar.', 'A woman is making a photo.']
 similarities = model.similarity(sentences_a, sentences_b)
 ```
 
 Or build index for a group of sentences and **search** among them
 ```python
-sentences = ['A woman is reading.','A man is playing a guitar.']
+sentences = ['A woman is reading.', 'A man is playing a guitar.']
 model.build_index(sentences)
 results = model.search("He plays guitar.")
 ```
 
-We also support [faiss](https://github.com/facebookresearch/faiss), an efficient similarity search library. Just install the package following [instructions](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md) here and change the above index code to
-```python
-model.build_index(sentences, use_faiss=True)
-```
+We also support [faiss](https://github.com/facebookresearch/faiss), an efficient similarity search library. Just install the package following [instructions](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md) here and `simcse` will automatically use `faiss` for efficient search.
+
+**WARNING**: We have found that `faiss` did not well support Nvidia AMPERE GPUs (3090 and A100). In that case, you should change to other GPUs or install the CPU version of `faiss` package.
 
 We also provide an easy-to-build [demo website](./demo) to show how SimCSE can be used in sentence retrieval.
 
-## Model list
+## Model List
 
 Our released models are listed as following. You can import these models by using the `simcse` package or using [HuggingFace's Transformers](https://github.com/huggingface/transformers). 
 |              Model              | Avg. STS |
@@ -100,7 +101,7 @@ Our released models are listed as following. You can import these models by usin
 
 ## Use SimCSE with Huggingface
 
-Besides using our provided sentence embedding tool, you can also easily import our model with HuggingFace's `transformers`:
+Besides using our provided sentence embedding tool, you can also easily import our models with HuggingFace's `transformers`:
 ```python
 import torch
 from scipy.spatial.distance import cosine
