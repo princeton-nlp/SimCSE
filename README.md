@@ -23,12 +23,12 @@ We anticipate the code will be out * **in one week** *. -->
   - [Overview](#overview)
   - [Getting Started](#getting-started)
   - [Model List](#model-list)
-  - [Use SimCSE with Huggingface](#use-our-models-out-of-the-box)
+  - [Use SimCSE with Huggingface](#use-simcse-with-huggingface)
   - [Train SimCSE](#train-simcse)
     - [Requirements](#requirements)
     - [Evaluation](#evaluation)
     - [Training](#training)
-  - [Bugs or Questions?](#Bugs-or-questions)
+  - [Bugs or Questions?](#bugs-or-questions)
   - [Citation](#citation)
   - [SimCSE Elsewhere](#simcse-elsewhere)
 
@@ -97,6 +97,8 @@ Our released models are listed as following. You can import these models by usin
 |  [princeton-nlp/sup-simcse-bert-large-uncased](https://huggingface.co/princeton-nlp/sup-simcse-bert-large-uncased)  |   82.21  |
 |     [princeton-nlp/sup-simcse-roberta-base](https://huggingface.co/princeton-nlp/sup-simcse-roberta-base)     |   82.52  |
 |     [princeton-nlp/sup-simcse-roberta-large](https://huggingface.co/princeton-nlp/sup-simcse-roberta-large)    |   83.76  |
+
+Note that the results are slightly better than what we have reported in the current version of the paper after adopting a new set of hyperparameters (for hyperparamters, see the [training](#training) section).
 
 **Naming rules**: `unsup` and `sup` represent "unsupervised" (trained on Wikipedia corpus) and "supervised" (trained on NLI datasets) respectively.
 
