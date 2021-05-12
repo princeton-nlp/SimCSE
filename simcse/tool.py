@@ -21,7 +21,8 @@ class SimCSE(object):
     def __init__(self, model_name_or_path: str, 
                 device: str = None,
                 num_cells: int = 100,
-                num_cells_in_search: int = 10):
+                num_cells_in_search: int = 10,
+                pooler = None):
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
         self.model = AutoModel.from_pretrained(model_name_or_path)
@@ -33,6 +34,14 @@ class SimCSE(object):
         self.is_faiss_index = False
         self.num_cells = num_cells
         self.num_cells_in_search = num_cells_in_search
+
+        if pooler is not None:
+            self.pooler = pooler
+        elif "unsup" in model_name_or_path:
+            logger.info("Use `cls_before_pooler` for unsupervised models. If you want to use other pooling policy, specify `pooler` argument.")
+            self.pooler = "cls_before_pooler"
+        else:
+            self.pooler = "cls"
     
     def encode(self, sentence: Union[str, List[str]], 
                 device: str = None, 
@@ -62,7 +71,13 @@ class SimCSE(object):
                     return_tensors="pt"
                 )
                 inputs = {k: v.to(target_device) for k, v in inputs.items()}
-                embeddings = self.model(**inputs, return_dict=True).pooler_output
+                outputs = self.model(**inputs, return_dict=True)
+                if self.pooler == "cls":
+                    embeddings = outputs.pooler_output
+                elif self.pooler == "cls_before_pooler":
+                    embeddings = outputs.last_hidden_state[:, 0]
+                else:
+                    raise NotImplementedError
                 if normalize_to_unit:
                     embeddings = embeddings / embeddings.norm(dim=1, keepdim=True)
                 embedding_list.append(embeddings.cpu())
@@ -112,9 +127,10 @@ class SimCSE(object):
         if use_faiss is None or use_faiss:
             try:
                 import faiss
+                assert hasattr(faiss, "IndexFlatIP")
                 use_faiss = True 
             except:
-                logger.warning("Fail to import faiss. Please install faiss or set faiss=False. Now the program continues with brute force search.")
+                logger.warning("Fail to import faiss. If you want to use faiss, install faiss through PyPI. Now the program continues with brute force search.")
                 use_faiss = False
         
         # if the input sentence is a string, we assume it's the path of file that stores various sentences
@@ -159,6 +175,7 @@ class SimCSE(object):
             index = embeddings
             self.is_faiss_index = False
         self.index["index"] = index
+        logger.info("Finished")
     
     def search(self, queries: Union[str, List[str]], 
                 device: str = None, 

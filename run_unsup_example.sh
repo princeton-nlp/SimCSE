@@ -9,8 +9,8 @@ python train.py \
     --train_file data/wiki1m_for_simcse.txt \
     --output_dir result/my-unsup-simcse-bert-base-uncased \
     --num_train_epochs 1 \
-    --per_device_train_batch_size 512 \
-    --learning_rate 5e-5 \
+    --per_device_train_batch_size 64 \
+    --learning_rate 3e-5 \
     --max_seq_length 32 \
     --evaluation_strategy steps \
     --metric_for_best_model stsb_spearman \
