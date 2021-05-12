@@ -116,6 +116,12 @@ class ModelArguments:
             "help": "Weight for MLM auxiliary objective (only effective if --do_mlm)."
         }
     )
+    mlp_only_train: bool = field(
+        default=False,
+        metadata={
+            "help": "Use MLP only during training"
+        }
+    )
 
 
 @dataclass
