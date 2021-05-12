@@ -11,6 +11,7 @@ Wait a minute! The authors are working day and night 💪, to make the code and 
 We anticipate the code will be out * **in one week** *. -->
 
 <!-- * 4/26: SimCSE is now on [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) (Thanks [@AK391](https://github.com/AK391)!). Try it out! -->
+* 5/12: We updated our [unsupervised models](#model-list) with new hyperparameters and better performance.
 * 5/10: We released our [sentence embedding tool](#getting-started) and [demo code](./demo).
 * 4/23: We released our [training code](#training).
 * 4/20: We released our [model checkpoints](#use-our-models-out-of-the-box) and [evaluation code](#evaluation).
