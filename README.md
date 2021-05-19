@@ -40,7 +40,7 @@ We propose a simple contrastive learning framework that works with both unlabele
 
 ## Getting Started
 
-We provide an easy-to-use sentence embedding tool based on our SimCSE model. To use the tool, first install the `simcse` package from pypi
+We provide an easy-to-use sentence embedding tool based on our SimCSE model (see our [Wiki](https://github.com/princeton-nlp/SimCSE/wiki) for detailed usage). To use the tool, first install the `simcse` package from PyPI
 ```bash
 pip install simcse
 ```
@@ -78,7 +78,7 @@ model.build_index(sentences)
 results = model.search("He plays guitar.")
 ```
 
-We also support [faiss](https://github.com/facebookresearch/faiss), an efficient similarity search library. Just install the package following [instructions](https://github.com/facebookresearch/faiss/blob/master/INSTALL.md) here and `simcse` will automatically use `faiss` for efficient search.
+We also support [faiss](https://github.com/facebookresearch/faiss), an efficient similarity search library. Just install the package following [instructions](https://github.com/princeton-nlp/SimCSE/wiki/Installation) here and `simcse` will automatically use `faiss` for efficient search.
 
 **WARNING**: We have found that `faiss` did not well support Nvidia AMPERE GPUs (3090 and A100). In that case, you should change to other GPUs or install the CPU version of `faiss` package.
 
