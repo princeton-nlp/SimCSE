@@ -193,7 +193,7 @@ def main():
         for task in ['MR', 'CR', 'SUBJ', 'MPQA', 'SST2', 'TREC', 'MRPC']:
             task_names.append(task)
             if task in results:
-                scores.append("%.2f" % (results[task]['devacc']))    
+                scores.append("%.2f" % (results[task]['acc']))    
             else:
                 scores.append("0.00")
         task_names.append("Avg.")
