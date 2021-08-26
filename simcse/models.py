@@ -89,7 +89,8 @@ def cl_init(cls, config):
     """
     cls.pooler_type = cls.model_args.pooler_type
     cls.pooler = Pooler(cls.model_args.pooler_type)
-    cls.mlp = MLPLayer(config)
+    if cls.model_args.pooler_type == "cls":
+        cls.mlp = MLPLayer(config)
     cls.sim = Similarity(temp=cls.model_args.temp)
     cls.init_weights()
 
@@ -277,7 +278,7 @@ class BertForCL(BertPreTrainedModel):
     def __init__(self, config, *model_args, **model_kargs):
         super().__init__(config)
         self.model_args = model_kargs["model_args"]
-        self.bert = BertModel(config)
+        self.bert = BertModel(config, add_pooling_layer=False)
 
         if self.model_args.do_mlm:
             self.lm_head = BertLMPredictionHead(config)
@@ -336,7 +337,7 @@ class RobertaForCL(RobertaPreTrainedModel):
     def __init__(self, config, *model_args, **model_kargs):
         super().__init__(config)
         self.model_args = model_kargs["model_args"]
-        self.roberta = RobertaModel(config)
+        self.roberta = RobertaModel(config, add_pooling_layer=False)
 
         if self.model_args.do_mlm:
             self.lm_head = RobertaLMHead(config)
