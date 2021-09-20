@@ -11,6 +11,7 @@ Wait a minute! The authors are working day and night 💪, to make the code and 
 We anticipate the code will be out * **in one week** *. -->
 
 <!-- * 4/26: SimCSE is now on [Gradio Web Demo](https://gradio.app/g/AK391/SimCSE) (Thanks [@AK391](https://github.com/AK391)!). Try it out! -->
+* 8/31: Our paper has been accepted to EMNLP! Please check out our [updated paper](https://arxiv.org/pdf/2104.08821.pdf) (with updated numbers and baselines). 
 * 5/12: We updated our [unsupervised models](#model-list) with new hyperparameters and better performance.
 * 5/10: We released our [sentence embedding tool](#getting-started) and [demo code](./demo).
 * 4/23: We released our [training code](#training).
@@ -261,7 +262,7 @@ Please cite our paper if you use SimCSE in your work:
 @inproceedings{gao2021simcse,
    title={{SimCSE}: Simple Contrastive Learning of Sentence Embeddings},
    author={Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
-   journal={Empirical Methods in Natural Language Processing (EMNLP)},
+   booktitle={Empirical Methods in Natural Language Processing (EMNLP)},
    year={2021}
 }
 ```
