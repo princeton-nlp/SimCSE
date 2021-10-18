@@ -132,3 +132,4 @@ dmypy.json
 .vscode
 data
 result
+.venv-cu11
