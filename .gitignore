@@ -133,3 +133,4 @@ dmypy.json
 data
 result
 .venv-cu11
+wandb
