@@ -500,6 +500,7 @@ def main():
             """
             Prepare masked tokens inputs/labels for masked language modeling: 80% MASK, 10% random, 10% original.
             """
+            inputs = inputs.clone()
             labels = inputs.clone()
             # We sample a few tokens in each sequence for MLM training (with probability `self.mlm_probability`)
             probability_matrix = torch.full(labels.shape, self.mlm_probability)
