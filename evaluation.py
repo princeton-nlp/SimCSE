@@ -125,7 +125,7 @@ def main():
         elif args.pooler == "avg":
             return ((last_hidden * batch['attention_mask'].unsqueeze(-1)).sum(1) / batch['attention_mask'].sum(-1).unsqueeze(-1)).cpu()
         elif args.pooler == "avg_first_last":
-            first_hidden = hidden_states[0]
+            first_hidden = hidden_states[1]
             last_hidden = hidden_states[-1]
             pooled_result = ((first_hidden + last_hidden) / 2.0 * batch['attention_mask'].unsqueeze(-1)).sum(1) / batch['attention_mask'].sum(-1).unsqueeze(-1)
             return pooled_result.cpu()

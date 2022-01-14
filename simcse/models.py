@@ -70,7 +70,7 @@ class Pooler(nn.Module):
         elif self.pooler_type == "avg":
             return ((last_hidden * attention_mask.unsqueeze(-1)).sum(1) / attention_mask.sum(-1).unsqueeze(-1))
         elif self.pooler_type == "avg_first_last":
-            first_hidden = hidden_states[0]
+            first_hidden = hidden_states[1]
             last_hidden = hidden_states[-1]
             pooled_result = ((first_hidden + last_hidden) / 2.0 * attention_mask.unsqueeze(-1)).sum(1) / attention_mask.sum(-1).unsqueeze(-1)
             return pooled_result
