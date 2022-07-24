@@ -211,7 +211,7 @@ class SimCSE(object):
             if isinstance(queries, list):
                 combined_results = []
                 for query in queries:
-                    results = self.search(query, device)
+                    results = self.search(query, device, threshold, top_k)
                     combined_results.append(results)
                 return combined_results
             
