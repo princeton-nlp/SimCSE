@@ -151,7 +151,8 @@ class SimCSE(object):
         if use_faiss:
             quantizer = faiss.IndexFlatIP(embeddings.shape[1])  
             if faiss_fast:
-                index = faiss.IndexIVFFlat(quantizer, embeddings.shape[1], min(self.num_cells, len(sentences_or_file_path))) 
+                index = faiss.IndexIVFFlat(quantizer, embeddings.shape[1], min(self.num_cells, len(sentences_or_file_path)), faiss.METRIC_INNER_PRODUCT) 
+                # index.metric_type = faiss.METRIC_INNER_PRODUCT
             else:
                 index = quantizer
 
