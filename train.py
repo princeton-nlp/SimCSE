@@ -203,6 +203,7 @@ class OurTrainingArguments(TrainingArguments):
             device = torch.device("cpu")
             self._n_gpu = 0
         elif is_torch_tpu_available():
+            import torch_xla.core.xla_model as xm
             device = xm.xla_device()
             self._n_gpu = 0
         elif self.local_rank == -1:
