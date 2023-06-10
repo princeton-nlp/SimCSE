@@ -18,10 +18,10 @@ setup(
     install_requires=[
         "tqdm",
         "scikit-learn",
-        "scipy>=1.5.4,<1.6",
+        "scipy>=1.10.1,<1.11",
         "transformers",
         "torch",
-        "numpy>=1.19.5,<1.20",
+        "numpy>=1.21.6,<1.22",
         "setuptools"
     ]
 )
