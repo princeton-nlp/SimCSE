@@ -198,7 +198,7 @@ Arguments for the evaluation script are as follows,
     * `cls_before_pooler`: Use the representation of `[CLS]` token without the extra linear+activation. If you use **unsupervised SimCSE**, you should take this option.
     * `avg`: Average embeddings of the last layer. If you use checkpoints of SBERT/SRoBERTa ([paper](https://arxiv.org/abs/1908.10084)), you should use this option.
     * `avg_top2`: Average embeddings of the last two layers.
-    * `avg_first_last`: Average embeddings of the first and last layers. If you use vanilla BERT or RoBERTa, this works the best.
+    * `avg_first_last`: Average embeddings of the first and last layers. If you use vanilla BERT or RoBERTa, this works the best. Note that in the paper we reported the average of last layer and the static word embedding; we fixed this to be last and first layer average and it led to better performance. See [this issue](https://github.com/princeton-nlp/SimCSE/issues/285) for a detailed discussion.
 * `--mode`: Evaluation mode
     * `test` (default): The default test mode. To faithfully reproduce our results, you should use this option.
     * `dev`: Report the development set results. Note that in STS tasks, only `STS-B` and `SICK-R` have development sets, so we only report their numbers. It also takes a fast mode for transfer tasks, so the running time is much shorter than the `test` mode (though numbers are slightly lower).
