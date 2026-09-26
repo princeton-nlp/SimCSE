@@ -529,7 +529,7 @@ def main():
             # The rest of the time (10% of the time) we keep the masked input tokens unchanged
             return inputs, labels
 
-    data_collator = default_data_collator if data_args.pad_to_max_length else OurDataCollatorWithPadding(tokenizer)
+    data_collator = OurDataCollatorWithPadding(tokenizer)
 
     trainer = CLTrainer(
         model=model,
