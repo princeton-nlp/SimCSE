@@ -210,6 +210,9 @@ def cl_forward(cls,
         cos_sim = cos_sim + weights
 
     loss = loss_fct(cos_sim, labels)
+    # DDP averages rank gradients; compensate only the detached-gather contrastive term.
+    if dist.is_initialized() and cls.training and mlm_outputs is not None and mlm_labels is not None:
+        loss = loss * dist.get_world_size()
 
     # Calculate loss for MLM
     if mlm_outputs is not None and mlm_labels is not None:
