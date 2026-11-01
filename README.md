@@ -99,7 +99,7 @@ Our released models are listed as following. You can import these models by usin
 |     [princeton-nlp/sup-simcse-roberta-base](https://huggingface.co/princeton-nlp/sup-simcse-roberta-base)     |   82.52  |
 |     [princeton-nlp/sup-simcse-roberta-large](https://huggingface.co/princeton-nlp/sup-simcse-roberta-large)    |   83.76  |
 
-Note that the results are slightly better than what we have reported in the current version of the paper after adopting a new set of hyperparameters (for hyperparamters, see the [training](#training) section).
+Note that the results are slightly better than what we have reported in the current version of the paper after adopting a new set of hyperparameters (for hyperparameters, see the [training](#training) section).
 
 **Naming rules**: `unsup` and `sup` represent "unsupervised" (trained on Wikipedia corpus) and "supervised" (trained on NLI datasets) respectively.
 
@@ -231,11 +231,11 @@ We provide example training scripts for both unsupervised and supervised SimCSE.
 
 All the other arguments are standard Huggingface's `transformers` training arguments. Some of the often-used arguments are: `--output_dir`, `--learning_rate`, `--per_device_train_batch_size`. In our example scripts, we also set to evaluate the model on the STS-B development set (need to download the dataset following the [evaluation](#evaluation) section) and save the best checkpoint.
 
-For results in the paper, we use Nvidia 3090 GPUs with CUDA 11. Using different types of devices or different versions of CUDA/other softwares may lead to slightly different performance.
+For results in the paper, we use Nvidia 3090 GPUs with CUDA 11. Using different types of devices or different versions of CUDA/other software may lead to slightly different performance.
 
 **Hyperparameters**
 
-We use the following hyperparamters for training SimCSE:
+We use the following hyperparameters for training SimCSE:
 
 |               | Unsup. BERT | Unsup. RoBERTa | Sup.      |
 |:--------------|:-----------:|:--------------:|:---------:|
